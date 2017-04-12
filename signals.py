@@ -66,7 +66,6 @@ class Signal(Symbol):
     # yeah, that's more confusing than anything.
     #def _eval_conjugate(self):
         #return -1*Signal([-i for i in self.k])
-        # TODO: implement custom complex conjugate: \chi_{k_1} -> \chi_{-k_1}?
 
 
 def amplitude(i):
@@ -92,7 +91,11 @@ def signal(k):
     return reduce(operator.mul, amps+[sig], 1)
 
 
-def signals_for_order(n, n_pulses, strict=True, filter_=None):
+def strict_ordering(k):
+    return all([abs(i)<=abs(j) for i, j in zip(k[:-1], k[1:])])
+
+
+def signals_for_order(n, n_pulses, strict=True, filters=None):
     """
     Generate signals for orders n for n_pulses. Uses strict ordering by default.
 
@@ -101,20 +104,14 @@ def signals_for_order(n, n_pulses, strict=True, filter_=None):
     expr : sympy expression
     """
     # TODO: better doc
-    # !!!
-    # TODO: strict ordering as implemented here may cause a problem.
-    # [1, -1] for order 2 can't result in -k1+k1 (only k1+k1, k1-k1, -k1-k1
-    # is that a problem? Exemple case: 3rd order 3 pulse: [k3-k3+k3] (SPM)
-    # This would influence the creation of amplitudes and
-    # responses: they would not commute anymore (maybe?)
-    if strict:
-        f = combinations_with_replacement
-    else:
-        f = lambda k, n: list(product(*repeat(k, n)))
-    k = range(1, n_pulses+1)
+    # TODO: support filters is an iterable or a function.
+    #f = lambda k, n: list(product(*repeat(k, n)))
+    k = range(1, n_pulses + 1)
     k = list(chain(*zip(k, [-i for i in k])))  # [1, -1, 2, -2, ...]
-    k = f(k, n)
+    # take all possible combinations of k with n repeats
+    k = list(product(*repeat(k, n))) #maybe product(k, n)
+    if strict:
+        k = filter(strict_ordering, k)
     if filter:
-        k = ifilter(filter_, k)
+        k = ifilter(filters, k)
     return sum([signal(i) for i in k])
-
