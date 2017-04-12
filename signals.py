@@ -1,7 +1,5 @@
-#!python2
-
 """
-Defines non-linear (and linear) signals.
+Defines non-linear signals and utility functions.
 """
 
 from __future__ import division, print_function
@@ -89,6 +87,19 @@ def signal(k):
     amps = [amplitude(i) for i in k]
     sig = Signal(k)
     return reduce(operator.mul, amps+[sig], 1)
+
+
+def e_field(i):
+    """
+    Generate the electric field from wavevector index i.
+    
+    Complex conjugate is returned if i<0.
+    """
+    i = abs(i)
+    s = amplitude(i)*sy.symbols("E_"+str(i))
+    if i < 0:
+        s = sy.funcitons.conjugate(s)
+    return s
 
 
 def strict_ordering(k):

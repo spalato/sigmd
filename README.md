@@ -1,3 +1,22 @@
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 # sigmd.py - Multidimensional spectroscopy signals analysis
 
 This module defines tools helpful to the study and isolation of 2D signals.
@@ -78,11 +97,55 @@ pulses. This function takes two optional arguments:
 ```python
 >>> signals_for_order(3,3, filters=filter_pp)
 ```
-$\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}$
+$\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}$
+
+As always, notebooks provide complete examples.
 
 ## Filters
 
-## Notebooks
+Filters help in eliminating contributions to the detected signal. They can be
+used to enforce experimental phase matching constraints or to neglect weak
+contributions. Useful filters are collected in the `filters` module. We 
+distinguish two kinds of filters: index filters and
+term filters.
+
+Index filters are applied during signal generation by `signals_for_order`.
+The filters are applied to the indices before the signal itself is created.
+Filtering out elements earlier in the process makes everything simpler. An
+example of this filter is `emit_along`, which lets you select signals which
+phase match a given wavevector (ex: $k_3$). Theses filters take a list of
+indices (ex: `[-1, 2, 3]`) and return true if they should be kept.
+
+Term filters are used to eliminate terms in the sum of contributions. They
+operate on the symbolic maths. This requires working with the internal sympy
+structures. As such, the definitions of these filters tends to be more
+complicated. There are two strategies to achieve the desired effect.
+
+In the first (simpler) strategy, you convert the symbol to it's string
+representation 
+(using `repr`) then apply string matching logic. For example, you can neglect
+signal-signal interference terms by keeping only the terms whose string
+representation contains `'E_'`, indicating an exciting field.
+
+The second technique revolves around the underlying sympy expression tree. This
+requires understanding of the sympy internals, but allows more powerful
+specifications, such as filtering by coherence transfer. For more details, see:
+http://docs.sympy.org/dev/tutorial/manipulation.html .
+
+
+# Notebooks
+The supplied notebooks act simultaneously as examples, benchmarks and reference.
+They are located in `notebooks/`.
+
+The most important notebooks are:
+- `pump_probe.ipynb` Examples of signal isolation using phase matching, phase
+cycling and chopping. This notebook is hopefully well documented and serves as
+an interactive tutorial of sorts.
+- `collinear_3p.ipynb` Collinear detection for 3 pulses. Demonstrates the phase
+ cycling from [!!!Cite].
+ 
+Other notebooks: None yet!
+
 
 # Future
 Action detection (maybe already works), Feymann/Liouville Pathways expansion,
