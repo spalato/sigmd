@@ -80,6 +80,22 @@ def amplitude(i):
         return sy.functions.conjugate(s)
 
 
+def phase(i):
+    "Phase component of amplitude(i)"
+    assert i != 0
+    s = sy.symbols("\phi_"+str(abs(i)), real=True)
+    if i < 0:
+        s = -s
+    return s
+
+
+def norm(i):
+    "Norm of amplitude(i)"
+    assert i != 0
+    s = sy.symbols("a_"+str(abs(i)), real=True)
+    return s
+
+
 def signal(k):
     """
     Generate a complete signal, including phase and power dependence.
@@ -98,7 +114,7 @@ def e_field(i):
     i = abs(i)
     s = amplitude(i)*sy.symbols("E_"+str(i))
     if i < 0:
-        s = sy.funcitons.conjugate(s)
+        s = sy.functions.conjugate(s)
     return s
 
 
@@ -120,9 +136,74 @@ def signals_for_order(n, n_pulses, strict=True, filters=None):
     k = range(1, n_pulses + 1)
     k = list(chain(*zip(k, [-i for i in k])))  # [1, -1, 2, -2, ...]
     # take all possible combinations of k with n repeats
-    k = list(product(*repeat(k, n))) #maybe product(k, n)
+    k = list(product(*repeat(k, n))) # maybe product(k, n)
     if strict:
         k = filter(strict_ordering, k)
-    if filter:
+    if filters:
         k = ifilter(filters, k)
     return sum([signal(i) for i in k])
+
+
+#  expression parsing and manipulation
+
+
+def list_indices(expr):
+    "Gathers the list of pulse indices present in expr. Returns a sorted list"
+    return sorted(list(
+        set(chain(*[map(abs, a.k)
+                    for a in sy.preorder_traversal(expr)
+                    if isinstance(a, Signal)]
+                  ))))
+
+
+def max_index(expr):
+    """Get largest pulse index"""
+    return max(list_indices(expr))
+
+
+def expand_amps(expr, phase_only=True):
+    """Expands the amplitudes to polar coordinates."""
+    indices = list_indices(expr)
+    expr = expr.subs(
+        [(amplitude(i), norm(i)*sy.exp(-sy.I*phase(i)))
+         for i in indices])
+    if phase_only:
+        expr = expr.subs(
+            [(norm(i), 1) for i in indices])
+    return expr
+
+
+def phase_cycle(expr, phases, weights=None, norms=None):
+    """
+    Apply phase cycling to expr.
+
+    This applies phase cycling to `expr`. The phases are cycled following the
+    table `phases` and optionally the chopping amplitudes `norms`. The resulting
+    expressions are summed with the given weights. If weights are specified
+    (default), they are determined automatically according to!!!
+
+    Parameters
+    ----------
+    expr: detected signal
+        Expression to phase-cycle.
+
+    phases: (n,m) list of list of phases (reals).
+        Table of phases for n-step phase cycling (rows) with m pulses (columns)
+
+    norms: (n,m) list of list of chopping factors (reals)
+        Table of amplitude/chopping factors for n-step phase cycling (rows) with
+        m pulses (columns). Optional. Defaults to no chopping.
+
+    weights: (n,) list of weights (complex)
+        List of weights for n-step phase cycling. By default, they are
+        determined automatically.
+
+    """
+    # TODO: handle norms, handle weights.
+    if norms is None:
+        norms = repeat(repeat(1))
+    cycled = sum([w * expr.subs(
+                        [(amplitude(i + 1), a * sy.exp(-sy.I * p))
+                         for i, (a, p) in enumerate(zip(rads, phis))])
+                  for w, rads, phis in zip(weights, norms, phases)])
+    return cycled

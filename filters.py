@@ -66,19 +66,7 @@ def phasematch_filter(d):
     Essentially a wrapper over `emit_along`.
     """
     def emit_along_d(k):
-        """Index filter for phase matching direction k_{d}.
-    
-    Parameters
-    ----------
-    k : list of int
-        Interaction indices (ie: `[-1,2,3]` for -k_1+k_2+k_3.
-    
-    Returns
-    -------
-    accept : bool
-        k is emitted along {d}
-    """.format(d=d)
-        return emit_along(d)
+        return emit_along(d, k)
     return emit_along_d
 
 
@@ -101,7 +89,23 @@ def fundamental_freq(k):
     return abs(sum([copysign(1,i) for i in k])) == 1
 
 
+_pp_filter = multifilter([fundamental_freq, phasematch_filter(3)])
+
+
+def pump_probe(k):
+    """
+    Filter for 3-pulses pump-probe geometry.
+    
+    It requires phase matching along k_3 and the total interaction order
+    to stay 1.
+    """
+    return _pp_filter(k)
+
+
 # term filters
+
+def filter_terms(f, expr):
+    return expr.func(*filter(f, expr.args))
 
 
 def contains(s, sig):

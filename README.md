@@ -138,6 +138,7 @@ The supplied notebooks act simultaneously as examples, benchmarks and reference.
 They are located in `notebooks/`.
 
 The most important notebooks are:
+- `signals.ipynb` Demonstrates the basic properties of the signals.
 - `pump_probe.ipynb` Examples of signal isolation using phase matching, phase
 cycling and chopping. This notebook is hopefully well documented and serves as
 an interactive tutorial of sorts.
@@ -145,6 +146,12 @@ an interactive tutorial of sorts.
  cycling from [!!!Cite].
  
 Other notebooks: None yet!
+
+Whishlist:
+- Tan 3 step PP (or merge in PP)?
+- boxcars
+- action based.
+
 
 
 # Future
