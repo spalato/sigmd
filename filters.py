@@ -75,7 +75,7 @@ def fundamental_freq(k):
     Index filter for fundamental spectral band.
     
     Total interaction order is 1 such that the spectral frequency is close
-    to the input.
+    to the input, and by convention we keep only positive.
     
     Parameters
     ----------
@@ -86,11 +86,10 @@ def fundamental_freq(k):
     -------
     accept : bool
     """
-    return abs(sum([copysign(1,i) for i in k])) == 1
+    return sum([copysign(1,i) for i in k]) == 1
 
 
 _pp_filter = multifilter([fundamental_freq, phasematch_filter(3)])
-
 
 def pump_probe(k):
     """
@@ -100,6 +99,16 @@ def pump_probe(k):
     to stay 1.
     """
     return _pp_filter(k)
+
+_collinear_filter = fundamental_freq
+
+def collinear(k):
+    """
+    Filter for 3-pulses interferometric detection.
+    
+    It requires total interaction order to stay 1 (ie: no SHG, THG...).
+    """
+    return _collinear_filter(k)
 
 
 # term filters

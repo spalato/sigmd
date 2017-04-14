@@ -20,17 +20,25 @@ MathJax.Hub.Queue(function() {
 # sigmd.py - Multidimensional spectroscopy signals analysis
 
 This module defines tools helpful to the study and isolation of 2D signals.
-It uses symbolic mathematics (using `sympy`) to keep track of all the
-terms in the detected signals. It can keep track of signals of arbitrary order. 
+The complete expressions for the detected non-linear signals can easily contain
+over 100 terms. This makes bookkeeping unwieldy, despite the expressions being
+relatively simple sums and products.
+
+This module uses symbolic mathematics (`sympy`) to keep track of all the
+terms in the detected signals. This allows the study of experimental signal 
+retrieval for multiple pulse experiments up to arbitrary order.
 
 The module is meant as a toolkit for scripted work (ie: in a jupyter notebook).
 Representative notebooks are supplied as examples of signal isolation using
 phase matching, phase cycling and chopping. These notebooks aim to reproduce
-results from the litterature and techniques common to the multidimensional
+results from the literature and techniques common to the multidimensional
 spectroscopy community.
  
 This toolkit is not comprehensive: it aims at helping with the study of phase
-cycling schemes. If you want to expand it or integrate this into a larger
+cycling schemes. This of course not the only way to isolate signals: rotating
+frames, frequency filtering and other physical arguments are not covered
+(although some cases shouldn't be too hard.). 
+If you want to expand it or integrate this into a larger
 project, let us know!
  
 # Installing
@@ -40,6 +48,7 @@ The quickest way to install all these things is by installing the Anaconda
 distribution (https://www.continuum.io/downloads). 
 
 If you prefer a manual installation, have a look at:
+
 - Python (though, if you need this, we strongly recommend Anaconda.): https://www.python.org/downloads/
 - Sympy: http://docs.sympy.org/latest/index.html
 - Jupyter: http://jupyter.readthedocs.io/en/latest/install.html
@@ -68,8 +77,8 @@ a good place to start.
 ## Signals
 Signals are defined in `signals.py`. A `Signal` object is a sympy symbol
 representing a non-linear response. The prefered way to create them is
-by using the `signal(k)` (for a single signal) and `signal_for_order` helper
-function:
+by using the helper functions: `signal(k)` for a single signal and 
+`signal_for_order(n, m)`, for multiple signals.
 
 ```python
 >>> signal([-1, 2, 3])
@@ -91,15 +100,16 @@ $\alpha=(0,0,1)$.
 To generate multiple signals at once, use the `signals_for_order(n, m)`
 function. This function will return the sum of all signals of order `n` from `m`
 pulses. This function takes two optional arguments:
+
 1. `strict` for strict ordering (ex: pulse 1 never follows pulse 2) (default: True)
 2. `filters` to filter out some pulse orders. They are detailed in the next section.
 
 ```python
->>> signals_for_order(3,3, filters=filter_pp)
+>>> signals_for_order(3,3, filters=pump_probe)
 ```
 $\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}$
 
-As always, notebooks provide complete examples.
+Notebooks provide complete examples.
 
 ## Filters
 
@@ -138,6 +148,7 @@ The supplied notebooks act simultaneously as examples, benchmarks and reference.
 They are located in `notebooks/`.
 
 The most important notebooks are:
+
 - `signals.ipynb` Demonstrates the basic properties of the signals.
 - `pump_probe.ipynb` Examples of signal isolation using phase matching, phase
 cycling and chopping. This notebook is hopefully well documented and serves as
@@ -148,10 +159,17 @@ an interactive tutorial of sorts.
 Other notebooks: None yet!
 
 Whishlist:
+
 - Tan 3 step PP (or merge in PP)?
 - boxcars
 - action based.
 
+## Extensions
+The following notebook extensions will make for a more pleasurable experience
+ (see https://github.com/ipython-contrib/jupyter_contrib_nbextensions):
+
+- Collapsible Headings
+- Table of Contents.
 
 
 # Future

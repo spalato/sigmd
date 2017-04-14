@@ -3,6 +3,8 @@ Defines non-linear signals and utility functions.
 """
 
 from __future__ import division, print_function
+
+from math import copysign
 from sympy.core.symbol import Symbol
 from sympy.core.cache import cacheit
 import sympy as sy
@@ -173,7 +175,49 @@ def expand_amps(expr, phase_only=True):
     return expr
 
 
-def phase_cycle(expr, phases, weights=None, norms=None):
+def weights(alpha, phases):
+    """
+    Compute phase cycling weights to isolate a given coherence transfer pathway.
+    
+    Parameters
+    ----------
+    alpha: (m,) list of ints
+        Coherence tranfer pathway. ex: (-1, 1, 1) for rephasing.
+    phases: (n,m) list of phases
+        Table of phases for n-step phase cycling (rows) with m pulses (columns).
+        
+    Returns
+    -------
+    weights: (n,) list of weights (complex)
+        List of weights for n-step phase cycling.
+    """
+    return [sy.exp(-sy.I*sum([a*p
+                              for a, p in zip(alpha, pulses)]))
+            for pulses in phases]
+
+
+def coh_transfer(k, n_pulses=None):
+    """
+    Compute coherence transfer pathway \alpha from interaction indices.
+    
+    This translates the [-1, 2, 3] convention used here to [-1, 1, 1] used in
+    phase cycling theory, where the position indicates the pulse and the value
+    indicates the total coherence transfer.
+    
+    Note that this relation cannot be inverted:
+    Both the pump probe k=[-1, 1, 3] and the linear k=[3] yield alpha = [0,0,1]
+    """
+    if n_pulses is None:
+        n_pulses = max([abs(v) for v in k])
+    alpha = [0 for i in range(n_pulses)]  # python is weird
+    for v in k:
+        i = abs(v)-1
+        t = copysign(1, v) # keep sign only
+        alpha[i] += t
+    return alpha
+
+
+def phase_cycle(expr, phases, weights, norms=None, expand_norms=False):
     """
     Apply phase cycling to expr.
 
@@ -186,24 +230,23 @@ def phase_cycle(expr, phases, weights=None, norms=None):
     ----------
     expr: detected signal
         Expression to phase-cycle.
-
     phases: (n,m) list of list of phases (reals).
         Table of phases for n-step phase cycling (rows) with m pulses (columns)
-
+    weights: (n,) list of weights (complex)
+        List of weights for n-step phase cycling.
     norms: (n,m) list of list of chopping factors (reals)
         Table of amplitude/chopping factors for n-step phase cycling (rows) with
         m pulses (columns). Optional. Defaults to no chopping.
 
-    weights: (n,) list of weights (complex)
-        List of weights for n-step phase cycling. By default, they are
-        determined automatically.
-
     """
-    # TODO: handle norms, handle weights.
     if norms is None:
-        norms = repeat(repeat(1))
+        if expand_norms:
+            norms = [[norm(i+1) for i in range(len(phases[0]))]
+                     for j in range(len(phases))]
+        else:
+            norms = repeat(repeat(1))
     cycled = sum([w * expr.subs(
                         [(amplitude(i + 1), a * sy.exp(-sy.I * p))
                          for i, (a, p) in enumerate(zip(rads, phis))])
                   for w, rads, phis in zip(weights, norms, phases)])
-    return cycled
+    return cycled.expand() # this will simplify things
