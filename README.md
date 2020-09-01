@@ -78,9 +78,7 @@ pathways. The signals are multiplied by complex prefactors <!-- $A_i$ --> <img s
 
 Not that this is **not** the coherence transfer pathways <!-- $\vec{\alpha}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cvec%7B%5Calpha%7D"> used in
 our paper [Seiler JCP 2017].  This notation allows the separation of signals with
-identical phases, such as the linear absorption <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3">, the pump-probe signal 
-<!-- $k_1-k_1+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_1-k_1%2Bk_3"> and the transient grating <!-- $k_3-k_3+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3-k_3%2Bk_3">, which all have
-<!-- $\alpha=(0,0,1)$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Calpha%3D(0%2C0%2C1)">.
+identical phases, such as the linear absorption <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3">, the pump-probe signal <!-- $k_1-k_1+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_1-k_1%2Bk_3"> and the transient grating <!-- $k_3-k_3+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3-k_3%2Bk_3">, which all have <!-- $\alpha=(0,0,1)$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Calpha%3D(0%2C0%2C1)">.
 
 To generate multiple signals at once, use the `signals_for_order(n, m)`
 function. This function will return the sum of all signals of order `n` from `m`
@@ -176,10 +174,13 @@ your contribution.
 
 # requirements
 
-check if python3 works
+check if python3 works. (I think it does)
 
 # Links
 
 [Seiler JCP 2017]: http://aip.scitation.org/doi/10.1063/1.4990500
 [Rendering of equations]: https://github.com/TeamMeow/vscode-math-to-image
 
+Seiler JCP 2017: http://aip.scitation.org/doi/10.1063/1.4990500
+
+Rendering of equations: https://github.com/TeamMeow/vscode-math-to-image
