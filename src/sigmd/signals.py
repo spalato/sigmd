@@ -1,6 +1,7 @@
 """
 Defines non-linear signals and utility functions.
 """
+# written for python 2
 
 from __future__ import division, print_function
 
@@ -9,7 +10,13 @@ from sympy.core.symbol import Symbol
 from sympy.core.cache import cacheit
 import sympy as sy
 import operator
-from itertools import product, combinations_with_replacement, chain, repeat, ifilter
+from functools import reduce
+from itertools import product, combinations_with_replacement, chain, repeat
+try:
+    from itertools import ifilter as filter
+except ImportError:
+    pass
+import warnings
 
 
 class Signal(Symbol):
@@ -107,14 +114,16 @@ def signal(k):
     return reduce(operator.mul, amps+[sig], 1)
 
 
-def e_field(i):
+def e_field(i, amp=True):
     """
     Generate the electric field from wavevector index i.
     
     Complex conjugate is returned if i<0.
     """
-    i = abs(i)
-    s = amplitude(i)*sy.symbols("E_"+str(i))
+    ia = abs(i)
+    s = sy.symbols("E_"+str(ia))
+    if amp:
+        s *= amplitude(ia)
     if i < 0:
         s = sy.functions.conjugate(s)
     return s
@@ -134,6 +143,7 @@ def signals_for_order(n, n_pulses, strict=True, filters=None):
     """
     # TODO: better doc
     # TODO: support filters is an iterable or a function.
+    warnings.warn("Signals for order now doesn't do the sum")
     #f = lambda k, n: list(product(*repeat(k, n)))
     k = range(1, n_pulses + 1)
     k = list(chain(*zip(k, [-i for i in k])))  # [1, -1, 2, -2, ...]
@@ -142,8 +152,8 @@ def signals_for_order(n, n_pulses, strict=True, filters=None):
     if strict:
         k = filter(strict_ordering, k)
     if filters:
-        k = ifilter(filters, k)
-    return sum([signal(i) for i in k])
+        k = filter(filters, k)
+    return [signal(i) for i in k]
 
 
 #  expression parsing and manipulation
@@ -249,4 +259,4 @@ def phase_cycle(expr, phases, weights, norms=None, expand_norms=False):
                         [(amplitude(i + 1), a * sy.exp(-sy.I * p))
                          for i, (a, p) in enumerate(zip(rads, phis))])
                   for w, rads, phis in zip(weights, norms, phases)])
-    return cycled.expand() # this will simplify things
+    return cycled#.expand() # this will simplify things

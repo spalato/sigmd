@@ -110,6 +110,13 @@ def collinear(k):
     """
     return _collinear_filter(k)
 
+def action(k):
+    """
+    Filter for action detection.
+
+    Requires total interaction order to stay 0 (ends in a population).
+    """
+    return sum([copysign(1, i) for i in k]) == 0
 
 # term filters
 
