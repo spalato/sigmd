@@ -22,8 +22,9 @@ frames, frequency filtering and other physical arguments are not covered
 If you want to expand it or integrate this into a larger
 project, let us know!
 
-(There may be some difficulty rendering equations in github markdown, sorry for any eyesores!)
-<!-- Generated using: https://tex-image-link-generator.herokuapp.com/ -->
+There may be some difficulty rendering equations in github markdown, sorry for any eyesores!
+Equations rendered using: Math to image VSCode extension. 
+In case of malfunction, direct your criticism at: https://github.com/contact
  
 # Installing
 The module requires python and sympy. To view and edit the notebooks, you will
@@ -37,7 +38,7 @@ If you prefer a manual installation, have a look at:
 - Sympy: http://docs.sympy.org/latest/index.html
 - Jupyter: http://jupyter.readthedocs.io/en/latest/install.html
 
-Once these things are setup, you can get the project by...!!!
+Once these things are setup, you can get the project by git clone.
 
 # How it works
 This module defines a `Signal` object, which describes a given non-linear response
@@ -67,21 +68,19 @@ by using the helper functions: `signal(k)` for a single signal and
 ```python
 >>> signal([-1, 2, 3])
 ```
-returns: <!--$\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}$-->
+returns: <!-- $\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D%20A_%7B2%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B1%7D%7D">
 
-![\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D)
 
-The signal <!--$\chi$-->![\chi](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cchi) is indexed by the light-matter interactions
+The signal $\chi$ is indexed by the light-matter interactions
 that gave rise to it: `signal([-1, 2, 3])` generates the signal resulting from the
-interactions with <!--$-k_1+k_2+k_3$-->![-k_1+k_2+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+-k_1%2Bk_2%2Bk_3). It is thus a sum of Feynmann
-pathways. The signals are multiplied by complex prefactors
-<!--$A_i$-->![A_i](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+A_i) used for phase cycling and chopping. 
+interactions with <!-- $-k_1+k_2+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=-k_1%2Bk_2%2Bk_3">. It is thus a sum of Feynmann
+pathways. The signals are multiplied by complex prefactors <!-- $A_i$ --> <img src="https://render.githubusercontent.com/render/math?math=A_i"> used for phase cycling and chopping. 
 
-Not that this is **not** the coherence transfer pathways <!--$\vec{\alpha}$-->![\vec{\alpha}](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cvec%7B%5Calpha%7D) used in
-our paper [!!! cite].  This notation allows the separation of signals with
-identical phases, such as the linear absorption <!--$k_3$-->![k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3), the pump-probe signal 
-<!--$k_1-k_1+k_3$-->![k_1-k_1+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_1-k_1%2Bk_3) and the transient grating <!--$k_3-k_3+k_3$-->![k_3-k_3+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3-k_3%2Bk_3), which all have
-<!--$\alpha=(0,0,1)$-->![\alpha=(0,0,1)](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Calpha%3D%280%2C0%2C1%29).
+Not that this is **not** the coherence transfer pathways <!-- $\vec{\alpha}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cvec%7B%5Calpha%7D"> used in
+our paper [Seiler JCP 2017].  This notation allows the separation of signals with
+identical phases, such as the linear absorption <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3">, the pump-probe signal 
+<!-- $k_1-k_1+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_1-k_1%2Bk_3"> and the transient grating <!-- $k_3-k_3+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3-k_3%2Bk_3">, which all have
+<!-- $\alpha=(0,0,1)$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Calpha%3D(0%2C0%2C1)">.
 
 To generate multiple signals at once, use the `signals_for_order(n, m)`
 function. This function will return the sum of all signals of order `n` from `m`
@@ -93,8 +92,14 @@ pulses. This function takes two optional arguments:
 ```python
 >>> signals_for_order(3,3, filters=pump_probe)
 ```
-<!--$\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}$-->
-![\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cchi_%7B%2Bk_1-k_1%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B%2Bk_1-k_2%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B%2Bk_2-k_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B%2Bk_3%2Bk_3-k_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D+%2B+%5Cchi_%7B%2Bk_3-k_3%2Bk_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D+%2B+%5Cchi_%7B-k_1%2Bk_1%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B-k_2%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B-k_3%2Bk_3%2Bk_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D)
+<!-- $$
+\begin{aligned}
+&\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} \\ &+ \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} \\ &+ \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}
+\end{aligned}
+$$ --> 
+
+<div align="center"><img src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Baligned%7D%0D%0A%26%5Cchi_%7B%2Bk_1-k_1%2Bk_3%7D%20A_%7B1%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B1%7D%7D%20%2B%20%5Cchi_%7B%2Bk_1-k_2%2Bk_3%7D%20A_%7B1%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B2%7D%7D%20%2B%20%5Cchi_%7B%2Bk_2-k_2%2Bk_3%7D%20A_%7B2%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B2%7D%7D%20%5C%5C%20%26%2B%20%5Cchi_%7B%2Bk_3%2Bk_3-k_3%7D%20A_%7B3%7D%5E%7B2%7D%20%5Coverline%7BA_%7B3%7D%7D%20%2B%20%5Cchi_%7B%2Bk_3-k_3%2Bk_3%7D%20A_%7B3%7D%5E%7B2%7D%20%5Coverline%7BA_%7B3%7D%7D%20%2B%20%5Cchi_%7B-k_1%2Bk_1%2Bk_3%7D%20A_%7B1%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B1%7D%7D%20%5C%5C%20%26%2B%20%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D%20A_%7B2%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B1%7D%7D%20%2B%20%5Cchi_%7B-k_2%2Bk_2%2Bk_3%7D%20A_%7B2%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B2%7D%7D%20%2B%20%5Cchi_%7B-k_3%2Bk_3%2Bk_3%7D%20A_%7B3%7D%5E%7B2%7D%20%5Coverline%7BA_%7B3%7D%7D%0D%0A%5Cend%7Baligned%7D%0D"></div>
+
 
 Notebooks provide complete examples.
 
@@ -110,7 +115,7 @@ Index filters are applied during signal generation by `signals_for_order`.
 The filters are applied to the indices before the signal itself is created.
 Filtering out elements earlier in the process makes everything simpler. An
 example of this filter is `emit_along`, which lets you select signals which
-phase match a given wavevector (ex: <!--$k_3$-->![k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3)). Theses filters take a list of
+phase match a given wavevector (ex: <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3">). Theses filters take a list of
 indices (ex: `[-1, 2, 3]`) and return true if they should be kept.
 
 Term filters are used to eliminate terms in the sum of contributions. They
@@ -176,5 +181,5 @@ check if python3 works
 # Links
 
 [Seiler JCP 2017]: http://aip.scitation.org/doi/10.1063/1.4990500
-[Rendering of equations]: https://tex-image-link-generator.herokuapp.com/
+[Rendering of equations]: https://github.com/TeamMeow/vscode-math-to-image
 
