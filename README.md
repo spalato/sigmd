@@ -1,22 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
 # sigmd.py - Multidimensional spectroscopy signals analysis
 
 This module defines tools helpful to the study and isolation of 2D signals.
@@ -40,6 +21,9 @@ frames, frequency filtering and other physical arguments are not covered
 (although some cases shouldn't be too hard.). 
 If you want to expand it or integrate this into a larger
 project, let us know!
+
+(There may be some difficulty rendering equations in github markdown, sorry for any eyesores!)
+<!-- Generated using: https://tex-image-link-generator.herokuapp.com/ -->
  
 # Installing
 The module requires python and sympy. To view and edit the notebooks, you will
@@ -83,19 +67,21 @@ by using the helper functions: `signal(k)` for a single signal and
 ```python
 >>> signal([-1, 2, 3])
 ```
-$\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}$
+returns: <!--$\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}$-->
 
-The signal $\chi$ is indexed by the light-matter interactions
+![\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D)
+
+The signal <!--$\chi$-->![\chi](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cchi) is indexed by the light-matter interactions
 that gave rise to it: `signal([-1, 2, 3])` generates the signal resulting from the
-interactions with $-k_1+k_2+k_3$ (??? Rephasing?). It is thus a sum of Feynmann
+interactions with <!--$-k_1+k_2+k_3$-->![-k_1+k_2+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+-k_1%2Bk_2%2Bk_3). It is thus a sum of Feynmann
 pathways. The signals are multiplied by complex prefactors
-$A_i$ used for phase cycling and chopping. 
+<!--$A_i$-->![A_i](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+A_i) used for phase cycling and chopping. 
 
-Not that this is **not** the coherence transfer pathways $\vec{\alpha}$ used in
+Not that this is **not** the coherence transfer pathways <!--$\vec{\alpha}$-->![\vec{\alpha}](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cvec%7B%5Calpha%7D) used in
 our paper [!!! cite].  This notation allows the separation of signals with
-identical phases, such as the linear absorption $k_3$, the pump-probe signal 
-$k_1-k_1+k_3$ and the transient grating $k_3-k_3+k_3$, which all have
-$\alpha=(0,0,1)$.
+identical phases, such as the linear absorption <!--$k_3$-->![k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3), the pump-probe signal 
+<!--$k_1-k_1+k_3$-->![k_1-k_1+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_1-k_1%2Bk_3) and the transient grating <!--$k_3-k_3+k_3$-->![k_3-k_3+k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3-k_3%2Bk_3), which all have
+<!--$\alpha=(0,0,1)$-->![\alpha=(0,0,1)](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Calpha%3D%280%2C0%2C1%29).
 
 To generate multiple signals at once, use the `signals_for_order(n, m)`
 function. This function will return the sum of all signals of order `n` from `m`
@@ -107,7 +93,8 @@ pulses. This function takes two optional arguments:
 ```python
 >>> signals_for_order(3,3, filters=pump_probe)
 ```
-$\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}$
+<!--$\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}$-->
+![\chi_{+k_1-k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{+k_1-k_2+k_3} A_{1} A_{3} \overline{A_{2}} + \chi_{+k_2-k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{+k_3+k_3-k_3} A_{3}^{2} \overline{A_{3}} + \chi_{+k_3-k_3+k_3} A_{3}^{2} \overline{A_{3}} + \chi_{-k_1+k_1+k_3} A_{1} A_{3} \overline{A_{1}} + \chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}} + \chi_{-k_2+k_2+k_3} A_{2} A_{3} \overline{A_{2}} + \chi_{-k_3+k_3+k_3} A_{3}^{2} \overline{A_{3}}](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cchi_%7B%2Bk_1-k_1%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B%2Bk_1-k_2%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B%2Bk_2-k_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B%2Bk_3%2Bk_3-k_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D+%2B+%5Cchi_%7B%2Bk_3-k_3%2Bk_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D+%2B+%5Cchi_%7B-k_1%2Bk_1%2Bk_3%7D+A_%7B1%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B1%7D%7D+%2B+%5Cchi_%7B-k_2%2Bk_2%2Bk_3%7D+A_%7B2%7D+A_%7B3%7D+%5Coverline%7BA_%7B2%7D%7D+%2B+%5Cchi_%7B-k_3%2Bk_3%2Bk_3%7D+A_%7B3%7D%5E%7B2%7D+%5Coverline%7BA_%7B3%7D%7D)
 
 Notebooks provide complete examples.
 
@@ -123,7 +110,7 @@ Index filters are applied during signal generation by `signals_for_order`.
 The filters are applied to the indices before the signal itself is created.
 Filtering out elements earlier in the process makes everything simpler. An
 example of this filter is `emit_along`, which lets you select signals which
-phase match a given wavevector (ex: $k_3$). Theses filters take a list of
+phase match a given wavevector (ex: <!--$k_3$-->![k_3](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+k_3)). Theses filters take a list of
 indices (ex: `[-1, 2, 3]`) and return true if they should be kept.
 
 Term filters are used to eliminate terms in the sum of contributions. They
@@ -154,7 +141,7 @@ The most important notebooks are:
 cycling and chopping. This notebook is hopefully well documented and serves as
 an interactive tutorial of sorts.
 - `collinear_3p.ipynb` Collinear detection for 3 pulses. Demonstrates the phase
- cycling from [!!!Cite].
+ cycling from [Seiler JCP 2017].
  
 Other notebooks: None yet!
 
@@ -173,10 +160,21 @@ The following notebook extensions will make for a more pleasurable experience
 
 
 # Future
+
+I have since moved on to other problems, but feel free to run with it.
+
+
+On the horizon was:
+
 Action detection (maybe already works), Feymann/Liouville Pathways expansion,
 your contribution.
 
 # requirements
 
 check if python3 works
+
+# Links
+
+[Seiler JCP 2017]: http://aip.scitation.org/doi/10.1063/1.4990500
+[Rendering of equations]: https://tex-image-link-generator.herokuapp.com/
 
