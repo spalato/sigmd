@@ -46,11 +46,11 @@ field, and some helper functions that automate their generation (ex: all 3rd
 order signals). 
 
 For a given detection scheme, some signals need to be neglected. For example,
-the pump-probe geometry will only detect signals emitted in the $k_3$ direction.
+the pump-probe geometry will only detect signals emitted in the <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3"> direction.
 This is implemented by `filters`, which can be supplied during the generation of
 the fields or applied afterwards.
 
-Once this is done, the detected fields need to be added (ie: $E_3$ in pump-probe
+Once this is done, the detected fields need to be added (ie: <!-- $E_3$ --> <img src="https://render.githubusercontent.com/render/math?math=E_3"> in pump-probe
 geometry) and the whole expression abs-squared and further manipulated (neglect
 signal-signal interference). The complete mess is then phase cycled (using
 substitution), to yield the detected signals. This part can be done 
@@ -71,13 +71,12 @@ by using the helper functions: `signal(k)` for a single signal and
 returns: <!-- $\chi_{-k_1+k_2+k_3} A_{2} A_{3} \overline{A_{1}}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cchi_%7B-k_1%2Bk_2%2Bk_3%7D%20A_%7B2%7D%20A_%7B3%7D%20%5Coverline%7BA_%7B1%7D%7D">
 
 
-The signal $\chi$ is indexed by the light-matter interactions
+The signal <!-- $\chi$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cchi"> is indexed by the light-matter interactions
 that gave rise to it: `signal([-1, 2, 3])` generates the signal resulting from the
 interactions with <!-- $-k_1+k_2+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=-k_1%2Bk_2%2Bk_3">. It is thus a sum of Feynmann
 pathways. The signals are multiplied by complex prefactors <!-- $A_i$ --> <img src="https://render.githubusercontent.com/render/math?math=A_i"> used for phase cycling and chopping. 
 
-Not that this is **not** the coherence transfer pathways <!-- $\vec{\alpha}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cvec%7B%5Calpha%7D"> used in
-our paper [Seiler JCP 2017].  This notation allows the separation of signals with
+Not that this is **not** the coherence transfer pathways <!-- $\vec{\alpha}$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cvec%7B%5Calpha%7D"> used in [our paper][Seiler JCP 2017].  This notation allows the separation of signals with
 identical phases, such as the linear absorption <!-- $k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3">, the pump-probe signal <!-- $k_1-k_1+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_1-k_1%2Bk_3"> and the transient grating <!-- $k_3-k_3+k_3$ --> <img src="https://render.githubusercontent.com/render/math?math=k_3-k_3%2Bk_3">, which all have <!-- $\alpha=(0,0,1)$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Calpha%3D(0%2C0%2C1)">.
 
 To generate multiple signals at once, use the `signals_for_order(n, m)`
